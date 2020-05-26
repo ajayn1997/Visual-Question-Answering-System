@@ -1,0 +1,13 @@
+data/Annotations_Val_mscoco.zip
+data/model_weights.h5
+data/data_train_val.zip
+data/glove.6B.zip
+data/glove.6B.50d.txt
+data/glove.6B.100d.txt
+data/glove.6B.200d.txt
+data/glove.6B.300d.txt
+data/mscoco_val2014_annotations.json
+data/glove.6B.50d.txt
+data/data_img.h5
+data/data_prepro.h5
+data/data_prepro.json
