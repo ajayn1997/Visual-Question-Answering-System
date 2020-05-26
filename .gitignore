@@ -11,3 +11,7 @@ data/glove.6B.50d.txt
 data/data_img.h5
 data/data_prepro.h5
 data/data_prepro.json
+data/MultipleChoice_mscoco_train2014_questions.json
+data/OpenEnded_mscoco_train2014_questions.json
+data/Questions_Train_mscoco.zip
+Utils/__pycache__/constants.cpython-37.pyc
