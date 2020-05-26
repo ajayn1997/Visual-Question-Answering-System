@@ -1,0 +1,2 @@
+# Visual-Question-Answering-System
+An end-to-end VQA system implemented using the Keras framework.Visual Question Answering (VQA) is one such challenge which requires high-level scene interpretation from images combined with language modelling of relevant Q&amp;A. Given an image and a natural language question about the image, the task is to provide an accurate natural language answer. This is an implementation of the model proposed by the original VQA paper by Agrawal et. al.  
