@@ -82,3 +82,33 @@ def get_metadata():
     meta_data['ix_to_word'] = {str(word):int(i) for i,word in meta_data['ix_to_word'].items()}
     return meta_data
 
+def prepare_embeddings(num_words, embedding_dim, metadata):
+    if os.path.exists(embedding_matrix_filename):
+        with h5py.File(embedding_matrix_filename) as f:
+            return np.array(f['embedding_matrix'])
+    
+    print('Embedding Data....')
+    with open(train_questions_path, 'r') as qs_file:
+        questions = json.loads(qs_file.read())
+        texts = [str(_['question']) for _ in questions['questions']]
+
+    embedding_index = {}
+    with open(glove_path, 'r') as glove_file:
+        for line in glove_file:
+            values = line.split()
+            word = values[0]
+            coefs = np.asarray(values[1:], dtype='float32')
+            embedding_index[word] = coefs
+    
+    embedding_matrix = np.zeors((num_words,embedding_dim))
+    word_index = metadata['ix_to_word']
+
+    for word, i in word_index.items():
+        embedding_vector = embedding_index.get(word)
+        if embedding_vector is not None:
+            embedding_matrix[i] = embedding_vector
+    
+    with h5py.File(embedding_matrix_filename,'w') as f:
+        f.create_dataset('embedding_matrix', data=embedding_matrix)
+    
+    return embedding_matrix
