@@ -54,10 +54,31 @@ def get_val_data():
     ques_test = right_align(ques_test, ques_length_test)
     
     # Convert all last index to 0, coz embeddings were made that way
+    for _ in ques_test:
+        if 12602 in _:
+            _[_==12602] = 0
     
+    val_X = [test_img_data, ques_test]
+
+    ans_to_ix = {str(ans):int(i) for i,ans in meta_data['ix_to_ans'].items()}
+    ques_annotations = {}
+    for _ in annotations['annotations']:
+        idx = ans_to_ix.get(_['multiple_choice_answer'].lower())
+        _['multiple_choice_answer_idx'] = 1 if idx in [None, 1000] else idx
+        ques_annotations[_['question_id']] = _
+
+    abs_val_y = [ques_annotations[ques_id]['multiple_choice_answer_idx'] for ques_id in ques_data['question_id_test']]
+    abs_val_y = to_categorical(np.array(abs_val_y))
+
+    multi_val_y = [list(set([ans_to_ix.get(_['answer'].lower()) for _ in ques_annotations[ques_id]['answers']])) for ques_id in ques_data['question_id_test']]
+    for i,_ in enumerate(multi_val_y):
+        multi_val_y[i] = [1 if ans in [None, 1000] else ans for ans in _]
+
+    return val_X, abs_val_y, multi_val_y    
 
 
 def get_metadata():
     meta_data = json.load(open(data_prepo_meta, 'r'))
     meta_data['ix_to_word'] = {str(word):int(i) for i,word in meta_data['ix_to_word'].items()}
     return meta_data
+
