@@ -3,7 +3,7 @@ from keras.utils.np_utils import to_categorical
 import json
 import h5py
 import os
-from constants import *
+from Utils.constants import *
 
 def right_align(seq, lengths):
     v = np.zeros(np.shape(seq))
@@ -60,7 +60,7 @@ def get_val_data():
     
     val_X = [test_img_data, ques_test]
 
-    ans_to_ix = {str(ans):int(i) for i,ans in meta_data['ix_to_ans'].items()}
+    ans_to_ix = {str(ans):int(i) for i,ans in metadata['ix_to_ans'].items()}
     ques_annotations = {}
     for _ in annotations['annotations']:
         idx = ans_to_ix.get(_['multiple_choice_answer'].lower())
@@ -93,14 +93,14 @@ def prepare_embeddings(num_words, embedding_dim, metadata):
         texts = [str(_['question']) for _ in questions['questions']]
 
     embedding_index = {}
-    with open(glove_path, 'r') as glove_file:
+    with open(glove_path, 'r', encoding="utf8") as glove_file:
         for line in glove_file:
             values = line.split()
             word = values[0]
             coefs = np.asarray(values[1:], dtype='float32')
             embedding_index[word] = coefs
     
-    embedding_matrix = np.zeors((num_words,embedding_dim))
+    embedding_matrix = np.zeros((num_words,embedding_dim))
     word_index = metadata['ix_to_word']
 
     for word, i in word_index.items():
