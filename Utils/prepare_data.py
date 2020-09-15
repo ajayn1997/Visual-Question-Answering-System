@@ -23,9 +23,9 @@ def read_data(data_limit):
     # Normalizing images
     tem = np.sqrt(np.sum(np.multiply(train_img_data, train_img_data), axis=1))
     train_img_data = np.divide(train_img_data, np.transpose(np.tile(tem, (4096,1))))
-
+    
     # Shifting padding to left side
-    ques_data = np.array(ques_data['ques_train'])[:data_limit, :]
+    ques_train = np.array(ques_data['ques_train'])[:data_limit, :]
     ques_length_train = np.array(ques_data['ques_length_train'])[:data_limit]
     ques_train = right_align(ques_train, ques_length_train)
 
