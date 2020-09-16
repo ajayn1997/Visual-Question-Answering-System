@@ -2,6 +2,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation, Dropout, LSTM, Flatten, Embedding, Multiply
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
 import h5py
+from keras.models import Model
 
 def Word2VecModel(embedding_matrix, num_words, embedding_dim, seq_length, dropout_rate):
     print('Creating text model....')
@@ -27,12 +28,12 @@ def vqa_model(embedding_matrix, num_words, embedding_dim, seq_length,dropout_rat
     vgg_model = img_model(dropout_rate)
     lstm_model = Word2VecModel(embedding_matrix, num_words, embedding_dim, seq_length, dropout_rate)
     print('Merging final model...')
-    fc_model = Sequential()
-    fc_model.add(Multiply([vgg_model, lstm_model]))
-    fc_model.add(Dropout(dropout_rate))
-    fc_model.add(Dense(1000, activation='tanh'))
-    fc_model.add(Dropout(dropout_rate))
-    fc_model.add(Dense(num_classes, activation='softmax'))
+    mergedOut = Multiply()([vgg_model.output, lstm_model.output])
+    mergedOut = Dropout(dropout_rate)(mergedOut)
+    mergedOut = Dense(1000, activation='tanh')(mergedOut)
+    mergedOut = Dropout(dropout_rate)(mergedOut)
+    mergedOut = Dense(num_classes, activation='softmax')(mergedOut)
+    fc_model = Model([vgg_model.input, lstm_model.input], mergedOut)
     fc_model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
                      metrics=['accuracy'])
     return fc_model
