@@ -28,12 +28,14 @@ def vqa_model(embedding_matrix, num_words, embedding_dim, seq_length,dropout_rat
     vgg_model = img_model(dropout_rate)
     lstm_model = Word2VecModel(embedding_matrix, num_words, embedding_dim, seq_length, dropout_rate)
     print('Merging final model...')
+
     mergedOut = Multiply()([vgg_model.output, lstm_model.output])
     mergedOut = Dropout(dropout_rate)(mergedOut)
     mergedOut = Dense(1000, activation='tanh')(mergedOut)
     mergedOut = Dropout(dropout_rate)(mergedOut)
     mergedOut = Dense(num_classes, activation='softmax')(mergedOut)
     fc_model = Model([vgg_model.input, lstm_model.input], mergedOut)
+
     fc_model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
                      metrics=['accuracy'])
     return fc_model
