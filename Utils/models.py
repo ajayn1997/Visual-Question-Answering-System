@@ -28,7 +28,7 @@ def vqa_model(embedding_matrix, num_words, embedding_dim, seq_length,dropout_rat
     lstm_model = Word2VecModel(embedding_matrix, num_words, embedding_dim, seq_length, dropout_rate)
     print('Merging final model...')
     fc_model = Sequential()
-    fc_model.add(Multiply([vgg_model, lstm_model]))
+    fc_model.add(Multiply()[vgg_model, lstm_model])
     fc_model.add(Dropout(dropout_rate))
     fc_model.add(Dense(1000, activation='tanh'))
     fc_model.add(Dropout(dropout_rate))
